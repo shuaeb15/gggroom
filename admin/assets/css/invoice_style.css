@@ -1,0 +1,100 @@
+    .sorting{
+        text-align:center;
+    }    
+    .description{
+        width: 300px !important;
+        height: 80px !important;
+
+    }
+    .qty{
+        width:70px !important;
+    }
+    .discount{
+        width:70px !important;
+    }
+    .txt{
+        width:90px !important;
+
+    }
+    #tax{
+        display: none;
+    }
+    .invoice{
+        /*color:blue;
+        margin:-30px 0 0 580px !important ;*/
+    }
+    .company_name{
+/*        background:blue;
+    margin:-30px 0 0 580px !important;*/
+    }
+    .company_add{
+        /*margin:-30px 0 0 579px!important;*/
+    }
+    .cust_email{
+        /*margin:-20px 0 0 10px !important;*/
+    }
+    .cust_name{
+        /*margin:-20px 0 0 0 !important;*/
+    }
+    .cust_add{
+        /*margin:-20px 0 0 0px !important;*/
+    }
+    .submit_btn{
+        /*margin:0 0 30px 0 !important;*/
+    }
+    .dataTables_info{
+/*        display:none;*/
+    }
+    .dataTables_paginate {
+/*        float: right;
+        text-align: right;
+        margin: 15px;*/
+    }
+    form.cmxform label.error, label.error {
+        color: #C93605;
+        font-style: italic;
+        float: left;
+        width: auto;
+        text-align: right;
+        font-weight: bold;
+        text-shadow: 0 1px 1px rgba(164, 44, 4, 0.2);
+    }
+    .dataTables_length{
+/*        display:none;*/
+    }
+    .dataTables_filter{
+/*        display:none;*/
+
+    }
+    .dataTables_paginate {
+/*        display:none;*/
+    }
+    #myTable tbody td{
+        border:1px solid #ccc;
+        padding: 10px !important;
+    }
+    .order_id{
+        width:100px !important;
+
+    }
+    
+.table-responsive {
+    overflow-x: visible;
+}
+
+input#cust_name,input#email,textarea#cust_add{
+    
+margin-bottom:10px;    
+    
+}
+.form-group .btn {
+    margin-bottom:5px;
+}
+
+.cust_add_1{
+    background:green;
+}
+
+.modal-dialog{margin: 30px auto !important;
+ padding:50px !important;
+ width:100% !important;}

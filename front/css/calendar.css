@@ -1,0 +1,108 @@
+body {
+    background: #fff;
+}
+
+#calendar {
+margin-top: 15px;
+margin-bottom: 15px;
+}
+
+.fc-unthemed .fc-content, .fc-unthemed .fc-divider, .fc-unthemed .fc-list-heading td, .fc-unthemed .fc-list-view, .fc-unthemed .fc-popover, .fc-unthemed .fc-row, .fc-unthemed tbody, .fc-unthemed td, .fc-unthemed th, .fc-unthemed thead{
+    border-color: #888; 
+}
+
+.top-cal-button {
+    margin-left: 10px;
+    margin-top: 10px;
+    background-color: #059797;
+    color: #fff;
+    height: 34px;
+    border: none;
+    width: auto;
+    border-radius: 0;
+    border: 2px solid #008080;
+}
+
+.top-cal-button option{
+    background: #fff;
+    color: #000
+}
+
+.closeon{
+background: #fff;
+border-radius: 50%;
+float: right;
+width: 15px;
+height: 15px;
+text-align: center;
+color: #000;
+position: absolute;
+right: 0;
+}
+
+.fc-widget-header{
+/*background-color:blue;*/
+}
+
+.fc-toolbar.fc-header-toolbar{
+background-color:#059797;   
+color: #fff;
+}
+
+.fc-sat,.fc-sun { color:#059797 !important;  }
+.fc-day-header { color:#888;  }
+.fc-day-header a{color: inherit;}
+.fc-sat .fc-day-number,.fc-sun .fc-day-number{ color:#059797;  }
+.fc-day-number{ color:#888;  }
+.fc-header-toolbar .fc-center{margin-top: 10px;}
+.fc-header-toolbar{height: 50px;}
+.fc-view-container{margin-top: 30px;}
+.service_category .emp-btn {
+    height: 35px;
+    font-size: 21px;
+    padding: 0px 15px;
+    background: #fff;
+    color: #059797;
+    border: 2px solid #888;
+    font-weight: 400;
+    text-transform: capitalize;
+    text-align: left;
+}
+.service_category .emp-btn:hover {
+    height: 35px;
+    font-size: 21px;
+    padding: 0px 15px;
+    background: #059797;
+    color: #fff;
+    border: 2px solid #888;
+    font-weight: 400;
+    text-transform: capitalize;
+    text-align: left;
+}
+.service_category .btn{
+    width: -webkit-fill-available;
+    height: 35px;
+    border-color: #888;
+    border-radius: 0px;
+    color: #059797;
+    text-transform: none;
+    border-width: 2px;
+    text-align:left;
+    font-size: 14px;
+}
+
+.emboss-btn:hover {
+    background: #059797;
+    color: #fff;
+}
+
+.service_category .btn.active, .service_category .btn:hover{
+    color: #fff;   
+    background: #059797;
+    border-color: #059797;
+}
+
+.full-width-btn{
+    text-transform: none;
+    border:0px;
+}

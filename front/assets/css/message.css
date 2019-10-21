@@ -1,0 +1,121 @@
+  .order_action{
+        color:#5A738E;
+        font-size:20px;
+    }
+    .Table table {
+     border: 1px solid #d3d1d1; 
+}
+.msgTR {
+    border-bottom: 1px solid #d3d1d1;
+}
+.Table table th {
+    background: linear-gradient(to bottom, #f7f7f7 0%, #e6e5e5 100%);
+    padding: 7px 10px;
+}
+.msgTR {
+    border-bottom: 1px solid #d3d1d1;
+}
+.Table table td {
+    padding: 7px 10px;
+}
+.even{
+    background-color: rgb(216, 214, 214);
+}
+.error {
+    width: 100% !important;
+}
+    .order_action{
+        color:#5A738E;
+        font-size:20px;
+    }
+    .sysmessagediv {
+    border-top: 1px solid #eeeeee;
+}
+.sysmessagediv {
+    text-align: center;
+    margin-bottom: 15px;
+}
+.sysmessagediv span {
+    border-radius: 5px;
+    background-color: #BBB;
+    color: #FFF;
+    font-size: 11px;
+    padding: 4px 6px;
+    display: inline-block;
+    max-width: 70%;
+}
+.wr_right, .wr_left {
+    margin-bottom: 15px;
+}
+.wr_left .avatar {
+    width: 32px;
+    height: 32px;
+    display: block;
+    float: left;
+    margin-right: 20px;
+    margin-left: 10px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.wr_left .bubble {
+    font-size: 11px;
+    max-width: 80%;
+    position: relative;
+    display: table-cell;
+    margin-top: 1px;
+    float: left;
+    padding: 5px 10px;
+    background: #FFFFFF;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    box-shadow: 0px 0px 3px rgba(0,0,0,.5);
+}
+.wr_left .timespan {
+    font-size: 11px;
+    color: #BBB;
+    position: absolute;
+    bottom: -3px;
+    left: 100%;
+    margin-left: 8px;
+    white-space: nowrap;
+}
+.avatar img {
+    border-radius: 50%;
+    max-width: 100%;
+}
+.wr_right .avatar {
+    width: 32px;
+    height: 32px;
+    display: block;
+    float: right;
+    margin-left: 20px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.wr_right .bubble {
+    position: relative;
+    float: right;
+    display: table-cell;
+    margin-top: 1px;
+    padding: 5px 10px;
+    background: #FFFFFF;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    box-shadow: 0px 0px 3px rgba(0,0,0,.5);
+    max-width: 80%;
+    font-size: 11px;
+}
+.wr_right .timespan {
+    font-size: 11px;
+    color: #BBB;
+    position: absolute;
+    bottom: -3px;
+    right: 100%;
+    margin-right: 8px;
+    white-space: nowrap;
+}
+.ui-autocomplete{
+    z-index: 9999999
+}
