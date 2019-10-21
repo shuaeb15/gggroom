@@ -1,18 +1,23 @@
 <?php
-
-defined('BASEPATH') OR exit('No direct script access allowed');
-
-/**
- * Dashboard class.
- *
- * @extends CI_Controller
- */
-class Home extends MY_Controller {
-    function __construct() {
+   
+   require APPPATH . '/libraries/REST_Controller.php';
+   use Restserver\Libraries\REST_Controller;
+     
+class Home extends REST_Controller {
+    
+    /**
+     * Get All Data from this method.
+     *
+     * @return Response
+    */
+    public function __construct() {
         parent::__construct();
+        $this->load->database();
         $this->load->helper(array('url'));
         $this->load->model('general_model');
+        $this->load->library('form_validation');
     }
+
 
     /**
      * index function.
@@ -228,11 +233,11 @@ class Home extends MY_Controller {
       }
     }
 
-    public function filter_services(){ 
+    public function filter_services_post(){ 
 
       $total_all_services =  $this->input->post('total_all_services');
       $start = $total_all_services;
-      $filter_location_name =  $this->input->post('filter_location');
+      $filter_location_name =  $this->input->post('filter_zipcode');
       if($filter_location_name != ''){
         // $city_name = $this->general_model->get_page_data_id('id', 'city', array('name' => $filter_location_name, 'is_deleted' => 0));
         $city_name = $this->general_model->get_page_data_id('id', 'shop', array('zipcode' => $filter_location_name, 'is_deleted' => 0));
@@ -273,7 +278,7 @@ class Home extends MY_Controller {
        $filter_data1 = $this->general_model->get_filter_data_list_main('services', array('services.is_deleted' => 0), $filter_services,$filter_shops, $filter_sorting, $main_date, $filter_min_price, $filter_max_price, $filter_location);
 
      //print_r($filter_data1); die();
-    // echo '<pre>'; print_r($filter_data1);exit;
+     //echo '<pre>'; print_r($filter_data1);exit;
       $limit = count($filter_data1);
      // $limit = 20;
        $all_total_services = count($filter_data1);
@@ -307,9 +312,9 @@ class Home extends MY_Controller {
         }
       }
       foreach ($filter_shop_list as $key => $services) {
-        $var =  $this->url_encrypt($services->id);
+        $var =  $services->id;
         $filter_shop_list[$key]->encrypt_id = $var;
-        $var2 =  $this->url_encrypt($services->shop_id);
+        $var2 =  $services->shop_id;
         $filter_shop_list[$key]->encrypt_shop_id = $var2;
 
         $img =  $services->image;
@@ -391,14 +396,19 @@ class Home extends MY_Controller {
         $whereArray = array('shop.is_active'=>1,'shop.is_deleted'=>0,'shop.latitude !=' => "",'shop.longitude !=' => "", 'shop.id'=>$value->shop_id);
         $ShopData = $this->general_model->get_shop_list_data('shop',$whereArray);
 
-        $main_shop_id =  $this->url_encrypt($ShopData[0]->id);
+        $main_shop_id =  $ShopData[0]->id;
         $main_url = site_url().'shop/services/'.$main_shop_id;
+
         $address = '<a href="'.$main_url.'" style="font-size: 18px;font-weight:500;cursor:pointer;">'.$ShopData[0]->shop_name.'</a><br/><label style="font-weight:bolder;text-transform:capitalize;">'.$ShopData[0]->addline1.', '.$ShopData[0]->city_name.', '.$ShopData[0]->state_name.', '.$ShopData[0]->zipcode.'</label>';
 
         $shop_New_Arr[] = array('lat'=>$ShopData[0]->latitude,'lng'=>$ShopData[0]->longitude,'description'=>$address);
       }
-     echo json_encode(array('services_list' => $filter_shop_list,'shop_list' => $shop_New_Arr,'total_services' => $check_worker_service, 'all_total_services' => $all_total_services, 'total_worker_service' => $total_worker_service));
+      $data = array('services_list' => $filter_shop_list,'shop_list' => $shop_New_Arr,'total_services' => $check_worker_service, 'all_total_services' => $all_total_services, 'total_worker_service' => $total_worker_service);
       // echo json_encode($filter_shop_list).'||'.json_encode($location);
+     $this->response([
+                         'status' => TRUE, 
+                         'data' => $data
+                             ], REST_Controller::HTTP_OK);
     }
 
     public function filter_reset(){

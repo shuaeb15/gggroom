@@ -229,6 +229,7 @@ class Home extends MY_Controller {
     }
 
     public function filter_services(){ 
+      print_r($_POST);
 
       $total_all_services =  $this->input->post('total_all_services');
       $start = $total_all_services;
