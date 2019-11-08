@@ -105,7 +105,8 @@ padding: 9px 18px 9px 14px !important;
                     <td><?php if(isset($value->price->price)){ echo '$'.$value->price->price;}?></td>
                     <td><?=$booking_status?></td>
                     <td style="padding-top: 15px;padding-bottom: 15px;">
-                      <?php if($admin_data[0]['user_promotion'] != 1){
+                      <?php 
+                      if($admin_data[0]['user_promotion'] != 1){
                              if(!empty($user_access_data)){
                               if($user_access_data[0]['u_delete'] == 1){?>
                                 <button type="button" name="button" class="cls-btn-active-class btn_active<?=$value->id?> btn cls_btn <?php if($value->is_deleted == 1){ echo 'price-filter-active';}?>"  data-appointment-id="<?=$value->id?>" style="<?php if($value->is_deleted == 0){ echo "background:green;padding:5px 14px !important";}else{ echo "background:red;padding:5px 10px !important";}?>;color:white;" ><?php if($value->is_deleted == 1){ echo 'Cancel';}else{ echo 'Active';}?></button>
@@ -123,6 +124,14 @@ padding: 9px 18px 9px 14px !important;
                       <?php if($value->booking_status == 0){?>
                               <button type="button" name="button" class="cls-btn-active-class btn_pending" id="btn_pending<?=$value->id?>" data-appointment-id="<?=$value->id?>" style="padding:5px 17px !important;background: #40E0D0;border-radius:3px;border:none;color:white;" >Pending</button>
                       <?php }?>
+
+                       <?php if($value->refund_request == 'yes'){?>
+                              <button type="button" name="button" class="cls-btn-active-class btn_refund" id="btn_refund<?=$value->id?>" data-appointment-id="<?=$value->id?>" style="padding:5px 17px !important;background: #40E0D0;border-radius:3px;border:none;color:white;" >Refund Request</button>
+                      <?php }?>
+                      <?php if($value->refund == 'yes'){?>
+                              <button type="button" name="button" class="cls-btn-active-class "  data-appointment-id="<?=$value->id?>" style="padding:5px 17px !important;background: #40E0D0;border-radius:3px;border:none;color:white;" >Refund Complete</button>
+                      <?php }?>
+
                       </td>
                     </tr>
                   <?php }?>
@@ -359,6 +368,53 @@ $(document).on('click', ".cls_btn", function (e) {
         }
       });
     });
+
+
+     $(document).on('click', ".btn_refund", function (e) {
+    var appointment_id = $(this).attr('data-appointment-id');
+      swal({
+        title: "Are you sure?",
+        text: "You want to Refund this",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-success",
+        confirmButtonText: "Yes, confirm",
+        cancelButtonText: "No, cancel",
+        closeOnConfirm: true,
+        closeOnCancel: true,
+     html: false
+      },
+      function(isConfirm) {
+        if (isConfirm) {
+          $.ajax({
+              url: site_url + 'appointment/refund_appointment',
+              method: "POST",
+              data: {id: appointment_id},
+              async: false,
+              success: function (data) {
+                  var obj = JSON.parse(data);
+                  console.log(obj);
+                  $('#btn_pending'+appointment_id).hide();
+                  if (obj.success == 'success') {
+                    swal("", "appointment activate", "success");
+                      $('.res').html('<div class="alert alert-success alert-dismissable"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>Refund confirm Successfully!</div>');
+                  }
+                  else if (obj.unsuccess == 'unsuccess') {
+                    swal("", "appointment activate", "unsuccess");
+                      $('.res').html('<div class="alert alert-danger alert-dismissable"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>unsuccessfully!</div>');
+
+                  } else {
+                    swal("", "appointment activate", "");
+                      $('.res').html('<div class="alert alert-danger alert-dismissable"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>Something went wrong!</div>');
+                  }
+              }
+          });
+        } else {
+          swal("Cancelled", "not refund", "error");
+        }
+      });
+    });
+
 });
 
 </script>

@@ -14,6 +14,8 @@ class Worker extends MY_Controller {
         parent::__construct();
         $this->load->helper(array('url'));
         $this->load->model('general_model');
+         $this->load->helper('form');
+              $this->load->library('form_validation');
     }
 
     /**
@@ -179,15 +181,18 @@ class Worker extends MY_Controller {
         if($user_list->u_category == 2 || $user_list->u_category == 3){
 
           if ($this->input->post()) {
-              $this->load->helper('form');
-              $this->load->library('form_validation');
+             
               $this->form_validation->set_rules('worker_name', 'Worker Name', 'required');
               $this->form_validation->set_rules('worker_mobile', 'Worker Title', 'required');
-              $this->form_validation->set_rules('worker_email', 'Worker Email', 'required|valid_email');
+              $this->form_validation->set_rules('worker_email', 'Worker Email', 'required');
               if ($this->form_validation->run() == false) {
                   $this->session->set_flashdata('error_message', "Please fill required fields.");
                   $this->session->set_userdata('USER_DETAIL', $_POST);
                   redirect('worker/add_worker/', 'refresh');
+                  
+                    // $this->session->set_flashdata('success_message', "Worker added successfully");
+                    //   redirect('worker', 'refresh');
+                      
               }else{
                 $uid = $this->session->userdata('uid');
                 $worker_name = $this->input->post('worker_name');
@@ -420,7 +425,7 @@ class Worker extends MY_Controller {
       }
       $config = array();
       $config['upload_path']          = FCPATH.'assets/uploads/'.$upload_path.'/';
-      $config['file_name'] 						= $temp_name;
+      $config['file_name']            = $temp_name;
       $config['allowed_types']        = 'gif|jpg|jpeg|png';
       // $config['max_size']             = 2000;
       $this->upload->initialize($config);
@@ -602,7 +607,8 @@ class Worker extends MY_Controller {
               $this->load->library('form_validation');
               $this->form_validation->set_rules('worker_name', 'Worker Name', 'required');
               $this->form_validation->set_rules('worker_mobile', 'Worker Title', 'required');
-              $this->form_validation->set_rules('worker_email', 'Worker Email', 'required|valid_email');
+            //  $this->form_validation->set_rules('worker_email', 'Worker Email', 'required|valid_email');
+              $this->form_validation->set_rules('worker_email', 'Worker Email', 'required');
               if ($this->form_validation->run() == false) {
                   $this->session->set_flashdata('error_message', "Please fill required fields.");
                   $this->session->set_userdata('USER_DETAIL', $_POST);
@@ -661,6 +667,17 @@ class Worker extends MY_Controller {
                 $chk .= $chk1.",";  
                 } 
 
+                $checkbox11=$_POST['service_list_all'];  
+               
+                
+                //print_r($_POST); 
+               
+                $chk2="";  
+                foreach($checkbox11 as $chk11)  
+                {  
+                $chk2 .= $chk11.",";  
+                } 
+
                 $data = array(
                     'name' => $worker_name,
                     'email' => $worker_email,
@@ -671,6 +688,7 @@ class Worker extends MY_Controller {
                     'break_start_time' => $break_time_start,
                     'break_end_time' => $break_time_end,
                     'shop_id' => $chk,
+                    'service_id' => $chk2,
                     'user_id' => $uid,
                     'shop_permission' => 0,
                     'image' => $image,
@@ -942,7 +960,7 @@ class Worker extends MY_Controller {
       }
       $config = array();
       $config['upload_path']          = FCPATH.'assets/uploads/'.$upload_path.'/';
-      $config['file_name'] 						= $temp_name;
+      $config['file_name']            = $temp_name;
       $config['allowed_types']        = 'gif|jpg|jpeg|png';
       // $config['max_size']             = 2000;
       $this->upload->initialize($config);

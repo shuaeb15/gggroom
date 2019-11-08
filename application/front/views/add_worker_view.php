@@ -450,7 +450,7 @@ $.ajax({
              //    html += '<option value="'+ data1[i].category_id +'">'+ data1[i].cat_name +'</option>';
              // html += '<span>'+ data1[i][0].cat_name +'</span><br>';
 
-              html += "<div class='col-md-11 col-xs-18'><span>"+ data1[i][0].service_name +"</span><br> <span style='font-size: 16px; color: rgba(0, 0, 0, 0.502);'> "+ data1[i][0].cat_name +"</span></div> <div class='col-md-1 col-xs-6 '><input type='checkbox' name='service_list_all[]' id='radio"+ data1[i][0].id +"' class='css-checkbox' value='"+ data1[i][0].id +"' ><label for='radio"+ data1[i][0].id +"' class='css-label css-label-check'></label></div>";
+              html += "<div class='col-md-11 col-xs-18'><span>"+ data1[i][0].service_name +"</span><br> <span style='font-size: 16px; color: rgba(0, 0, 0, 0.502);'> "+ data1[i][0].cat_name +"</span></div> <div class='col-md-1 col-xs-6 '><input type='checkbox' name='service_list_all[]' id='radioo"+ data1[i][0].id +"' class='css-checkbox' value='"+ data1[i][0].id +"' ><label for='radioo"+ data1[i][0].id +"' class='css-label css-label-check'></label></div>";
 
               }
               $('#my_worker_service_list').html(html);

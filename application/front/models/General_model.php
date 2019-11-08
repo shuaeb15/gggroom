@@ -69,6 +69,11 @@ class General_model extends CI_Model {
         return $this->db->get()->row();
 
     }
+    public function display_poll()
+    {
+      $query = $this->db->get('poll_qst');
+            return $query->row();
+    }
     public function insert_user($data, $table_name) {
         $this->db->insert($table_name, $data);
         return $this->db->insert_id();
@@ -101,8 +106,8 @@ class General_model extends CI_Model {
       $this->email->initialize(array(
         'protocol' => 'smtp',
         'smtp_host' => 'smtp.sendgrid.net',
-        'smtp_user' => 'pratikvekariya',
-        'smtp_pass' => 'pratik123#',
+        'smtp_user' => 'gggroom',
+        'smtp_pass' => 'Un1versa1',
         'smtp_port' => 587,
         'crlf' => "\r\n",
         'newline' => "\r\n"
@@ -183,17 +188,17 @@ class General_model extends CI_Model {
             </html>";
 
       // $emailBody = 'Your password has been updated, Try to Login with the new Password.';
-  		$this->load->library('email');
+      $this->load->library('email');
 
-  		$this->email->initialize(array(
+      $this->email->initialize(array(
         'protocol' => 'smtp',
         'smtp_host' => 'smtp.sendgrid.net',
-        'smtp_user' => 'pratikvekariya',
-        'smtp_pass' => 'pratik123#',
+        'smtp_user' => 'gggroom',
+ 'smtp_pass' => 'Un1versa1',
         'smtp_port' => 587,
         'crlf' => "\r\n",
         'newline' => "\r\n"
-  		));
+      ));
       $this->email->set_mailtype("html");
       $this->email->from('info@gggroom.com');
       $this->email->to($email);
@@ -230,8 +235,8 @@ class General_model extends CI_Model {
     $this->email->initialize(array(
       'protocol' => 'smtp',
       'smtp_host' => 'smtp.sendgrid.net',
-      'smtp_user' => 'pratikvekariya',
-      'smtp_pass' => 'pratik123#',
+      'smtp_user' => 'gggroom',
+      'smtp_pass' => 'Un1versa1',
       'smtp_port' => 587,
       'crlf' => "\r\n",
       'newline' => "\r\n"
@@ -881,8 +886,8 @@ class General_model extends CI_Model {
     $this->email->initialize(array(
       'protocol' => 'smtp',
       'smtp_host' => 'smtp.sendgrid.net',
-      'smtp_user' => 'pratikvekariya',
-      'smtp_pass' => 'pratik123#',
+      'smtp_user' => 'gggroom',
+      'smtp_pass' => 'Un1versa1',
       'smtp_port' => 587,
       'crlf' => "\r\n",
       'newline' => "\r\n"
@@ -1606,8 +1611,8 @@ class General_model extends CI_Model {
     $this->email->initialize(array(
       'protocol' => 'smtp',
       'smtp_host' => 'smtp.sendgrid.net',
-      'smtp_user' => 'pratikvekariya',
-      'smtp_pass' => 'pratik123#',
+      'smtp_user' => 'gggroom',
+      'smtp_pass' => 'Un1versa1',
       'smtp_port' => 587,
       'crlf' => "\r\n",
       'newline' => "\r\n"
@@ -1666,8 +1671,8 @@ class General_model extends CI_Model {
     $this->email->initialize(array(
       'protocol' => 'smtp',
       'smtp_host' => 'smtp.sendgrid.net',
-      'smtp_user' => 'pratikvekariya',
-      'smtp_pass' => 'pratik123#',
+      'smtp_user' => 'gggroom',
+      'smtp_pass' => 'Un1versa1',
       'smtp_port' => 587,
       'crlf' => "\r\n",
       'newline' => "\r\n"
@@ -1725,8 +1730,8 @@ public function cancel_appointment_sendemail_client($email_data){
   $this->email->initialize(array(
     'protocol' => 'smtp',
     'smtp_host' => 'smtp.sendgrid.net',
-    'smtp_user' => 'pratikvekariya',
-    'smtp_pass' => 'pratik123#',
+     'smtp_user' => 'gggroom',
+    'smtp_pass' => 'Un1versa1',
     'smtp_port' => 587,
     'crlf' => "\r\n",
     'newline' => "\r\n"
@@ -1785,8 +1790,8 @@ public function cancel_appointment_sendemail_client($email_data){
     $this->email->initialize(array(
       'protocol' => 'smtp',
       'smtp_host' => 'smtp.sendgrid.net',
-      'smtp_user' => 'pratikvekariya',
-      'smtp_pass' => 'pratik123#',
+       'smtp_user' => 'gggroom',
+      'smtp_pass' => 'Un1versa1',
       'smtp_port' => 587,
       'crlf' => "\r\n",
       'newline' => "\r\n"
@@ -1845,8 +1850,8 @@ public function cancel_appointment_sendemail_client($email_data){
     $this->email->initialize(array(
       'protocol' => 'smtp',
       'smtp_host' => 'smtp.sendgrid.net',
-      'smtp_user' => 'pratikvekariya',
-      'smtp_pass' => 'pratik123#',
+       'smtp_user' => 'gggroom',
+      'smtp_pass' => 'Un1versa1',
       'smtp_port' => 587,
       'crlf' => "\r\n",
       'newline' => "\r\n"
@@ -1927,8 +1932,8 @@ public function cancel_appointment_sendemail_client($email_data){
     $this->email->initialize(array(
       'protocol' => 'smtp',
       'smtp_host' => 'smtp.sendgrid.net',
-      'smtp_user' => 'pratikvekariya',
-      'smtp_pass' => 'pratik123#',
+      'smtp_user' => 'gggroom',
+     'smtp_pass' => 'Un1versa1',
       'smtp_port' => 587,
       'crlf' => "\r\n",
       'newline' => "\r\n"
@@ -1998,8 +2003,8 @@ public function cancel_appointment_sendemail_client($email_data){
     $this->email->initialize(array(
       'protocol' => 'smtp',
       'smtp_host' => 'smtp.sendgrid.net',
-      'smtp_user' => 'pratikvekariya',
-      'smtp_pass' => 'pratik123#',
+      'smtp_user' => 'gggroom',
+      'smtp_pass' => 'Un1versa1',
       'smtp_port' => 587,
       'crlf' => "\r\n",
       'newline' => "\r\n"
@@ -2044,8 +2049,8 @@ public function cancel_appointment_sendemail_client($email_data){
     $this->email->initialize(array(
       'protocol' => 'smtp',
       'smtp_host' => 'smtp.sendgrid.net',
-      'smtp_user' => 'pratikvekariya',
-      'smtp_pass' => 'pratik123#',
+      'smtp_user' => 'gggroom',
+      'smtp_pass' => 'Un1versa1',
       'smtp_port' => 587,
       'crlf' => "\r\n",
       'newline' => "\r\n"
@@ -2140,8 +2145,8 @@ public function cancel_appointment_sendemail_client($email_data){
     $this->email->initialize(array(
       'protocol' => 'smtp',
       'smtp_host' => 'smtp.sendgrid.net',
-      'smtp_user' => 'pratikvekariya',
-      'smtp_pass' => 'pratik123#',
+      'smtp_user' => 'gggroom',
+      'smtp_pass' => 'Un1versa1',
       'smtp_port' => 587,
       'crlf' => "\r\n",
       'newline' => "\r\n"
@@ -2244,8 +2249,8 @@ public function cancel_appointment_sendemail_client($email_data){
        $this->email->initialize(array(
          'protocol' => 'smtp',
          'smtp_host' => 'smtp.sendgrid.net',
-         'smtp_user' => 'pratikvekariya',
-         'smtp_pass' => 'pratik123#',
+         'smtp_user' => 'gggroom',
+         'smtp_pass' => 'Un1versa1',
          'smtp_port' => 587,
          'crlf' => "\r\n",
          'newline' => "\r\n"

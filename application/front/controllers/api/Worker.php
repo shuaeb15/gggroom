@@ -1,19 +1,17 @@
 <?php
 
-defined('BASEPATH') OR exit('No direct script access allowed');
+   require APPPATH . '/libraries/REST_Controller.php';
+   use Restserver\Libraries\REST_Controller;
+     
+class Worker extends REST_Controller {
 
-/**
- * Dashboard class.
- *
- * @extends CI_Controller
- */
 
-// SELECT * FROM `workers` WHERE FIND_IN_SET("2", shop_id)
-class Worker extends MY_Controller {
     function __construct() {
         parent::__construct();
+        $this->load->database();
         $this->load->helper(array('url'));
         $this->load->model('general_model');
+        $this->load->library('form_validation');
     }
 
     /**
@@ -22,23 +20,12 @@ class Worker extends MY_Controller {
      * @access public
      * @return void
      */
-    public function index() {
-      $footer_pages1 = $this->general_model->get_footer_page_data('*', 'page', array('flag' => 1, 'is_deleted' => 0));
-      $this->data['footer_pages1'] = $footer_pages1;
-
-      $footer_pages2 = $this->general_model->get_footer_page_data('*', 'page', array('flag' => 2, 'is_deleted' => 0));
-      $this->data['footer_pages2'] = $footer_pages2;
-
-      $footer_pages3 = $this->general_model->get_footer_page_data('*', 'page', array('flag' => 3, 'is_deleted' => 0));
-      $this->data['footer_pages3'] = $footer_pages3;
-
-      if (!$this->session->userdata('uid')) {
-        redirect(site_url());
-      }
-      else{
-        $id = $this->session->userdata('uid');
+    public function worker_list_post() {
+    
+        $id = $this->input->post('uid');
         $user_list = $this->general_model->get_user_data('*', 'user', array('id' => $id, 'is_active' => 1));
         $this->data['userlist'] = $user_list;
+        
 
         if($user_list->u_category == 2 || $user_list->u_category == 3){
           if($user_list->u_category == 3){
@@ -53,41 +40,31 @@ class Worker extends MY_Controller {
           }
           $worker_list = $this->general_model->get_worker_shop_data('*', 'workers', array('is_deleted' => 0), $all_u_id);
           foreach ($worker_list as $key => $worker) {
-            $var =  $this->url_encrypt($worker->id);
+            $var =  $worker->id;
             $worker_list[$key]->encrypt_id = $var;
           }
           $this->data['workerlist'] = $worker_list;
-          $this->data['title'] = 'Worker | GGG Rooms';
-          if(count($worker_list) > 0){
-            $this->render('worker');
-          }
-          else{
-              $this->render('blank_worker');
-          }
+          
+            $this->response([
+                         'status' => TRUE, 
+                         'data' => $worker_list
+                             ], REST_Controller::HTTP_OK);
+         
         }else{
           redirect('profile', 'refresh');
+           $this->response([
+                                'status' => FALSE,
+                                'message' => 'Not authorized user.'
+                            ], REST_Controller::HTTP_NOT_FOUND);
         }
-      }
+      
     }
 
-    public function add_worker() {
+   
 
+    public function shop_list_user_post() {
 
-
-      $footer_pages1 = $this->general_model->get_footer_page_data('*', 'page', array('flag' => 1, 'is_deleted' => 0));
-      $this->data['footer_pages1'] = $footer_pages1;
-
-      $footer_pages2 = $this->general_model->get_footer_page_data('*', 'page', array('flag' => 2, 'is_deleted' => 0));
-      $this->data['footer_pages2'] = $footer_pages2;
-
-      $footer_pages3 = $this->general_model->get_footer_page_data('*', 'page', array('flag' => 3, 'is_deleted' => 0));
-      $this->data['footer_pages3'] = $footer_pages3;
-
-      if (!$this->session->userdata('uid')) {
-        redirect(site_url());
-      }
-      else{
-        $id = $this->session->userdata('uid');
+        $id = $this->input->post('uid');
         $user_list = $this->general_model->get_user_data('*', 'user', array('id' => $id, 'is_deleted' => 0));
         $this->data['userlist'] = $user_list;
 
@@ -104,38 +81,27 @@ class Worker extends MY_Controller {
             array_push($all_u_id,$value->id);
           }
 
-          // $shop_list = $this->general_model->get_shop_list_data_by_user('shop', array('shop.is_deleted' => 0), $all_u_id);
           $shop_list = $this->general_model->get_shop_list_data_by_user_list('shop', array('shop.is_deleted' => 0), $id);
-          
           $this->data['shoplist'] = $shop_list;
-          $this->data['title'] = 'Worker | GGG Rooms';
 
-          $this->data['js_file'] = array(
-              "front/js/jquery-confirm.min.js",
-              "front/js/jquery.timepicker.js",
-              "front/js/datepair.js",
-              "front/js/jquery.datepair.js",
-              "front/js/worker.js"
-          );
-          $this->data['css_file'] = array(
-              "front/css2/jquery-confirm.min.css",
-              "front/css/jquery.timepicker.css"
-          );
-
-          // $this->render('add_worker');
-          $this->render('add_worker_view');
+          
+            $this->response([
+                         'status' => TRUE,
+                          'data' => $shop_list
+                             ], REST_Controller::HTTP_OK);
         }else{
-          redirect('profile', 'refresh');
+           $this->response([
+                                    'status' => FALSE,
+                                    'message' => 'Not authorized.'
+                                ], REST_Controller::HTTP_NOT_FOUND);
         }
-      }
+      
     }
 
-    public function insert_worker() {
-      if (!$this->session->userdata('uid')) {
-          redirect(site_url());
-      }else{
+    public function insert_worker_post() {
+     
          //echo '<pre>'; print_r($_POST); exit;
-        if(!$_POST['all_day'] && $_POST['vacation_start_date']){
+        if($_POST['all_day']=='off' && $_POST['vacation_start_date']){
           $ds = str_replace('/', ',', $_POST['vacation_start_date']);
           $ts = str_replace(':', ',', $_POST['vacation_start_time']);
           $date_start = $ts.',0,'.$ds;
@@ -164,7 +130,7 @@ class Worker extends MY_Controller {
 
           $vacation_end_date = date("y-m-d h:i:s",mktime($he,$ie,$se,$me,$de,$ye));
           // echo $vacation_start_date.','.$vacation_end_date;exit;
-        }else if($_POST['all_day'] && $_POST['vacation_start_date']){
+        }else if($_POST['all_day']=='on' && $_POST['vacation_start_date']){
           $vacation_start_date = date("y-m-d h:i:s",mktime($_POST['vacation_start_date']));
           $vacation_end_date = date("y-m-d h:i:s",mktime($_POST['vacation_end_date']));
         }
@@ -172,7 +138,7 @@ class Worker extends MY_Controller {
           $_POST['vacation_start_date'] = '';
           $_POST['vacation_end_date'] = '';
         }
-        $id = $this->session->userdata('uid');
+        $id = $this->input->post('uid');
         $user_list = $this->general_model->get_user_data('*', 'user', array('id' => $id, 'is_deleted' => 0));
         $this->data['userlist'] = $user_list;
 
@@ -183,13 +149,17 @@ class Worker extends MY_Controller {
               $this->load->library('form_validation');
               $this->form_validation->set_rules('worker_name', 'Worker Name', 'required');
               $this->form_validation->set_rules('worker_mobile', 'Worker Title', 'required');
-              $this->form_validation->set_rules('worker_email', 'Worker Email', 'required|valid_email');
+              $this->form_validation->set_rules('worker_email', 'Worker Email', 'required');
               if ($this->form_validation->run() == false) {
-                  $this->session->set_flashdata('error_message', "Please fill required fields.");
-                  $this->session->set_userdata('USER_DETAIL', $_POST);
-                  redirect('worker/add_worker/', 'refresh');
+                 
+
+                  $this->response([
+                                'status' => FALSE,
+                                'message' => 'Please fill required fields.'
+                            ], REST_Controller::HTTP_NOT_FOUND);
+
               }else{
-                $uid = $this->session->userdata('uid');
+                $uid = $this->input->post('uid');
                 $worker_name = $this->input->post('worker_name');
                 $worker_email = $this->input->post('worker_email');
                 $mobile_no = $this->input->post('worker_mobile');
@@ -306,8 +276,9 @@ class Worker extends MY_Controller {
                       'is_deleted' => 0,
                   );
                   $insert_user_id = $this->general_model->insert_worker_data($user_data, 'user');
-                  $user_id =  $this->url_encrypt($insert_user_id);
-                  $worker_id =  $this->url_encrypt($insert_id);
+                  
+                  $user_id =  $insert_user_id;
+                  $worker_id =  $insert_id;
 
                   $u_data = array(
                       'firstname' => $worker_name,
@@ -322,84 +293,47 @@ class Worker extends MY_Controller {
                   if($insert_id){
                     // $service_time = $this->input->post('service_time[]');
                     $insert_worker_vacation = $this->general_model->insert_worker_data($worker_data, 'vacation_module');
-                    // foreach ($service_time as $key => $value) {
-                    //   $business_hours_day = $value;
-                    //   $business_hours_from_time = $this->input->post('Monday1');
-                    //   $business_hours_to_time = $this->input->post('Monday2');
-                    //
-                    //   $f_start = date("H:i", strtotime($business_hours_from_time));
-                    //   $t_start = date("H:i", strtotime($business_hours_to_time));
-                    //
-                    //     $data1 = array(
-                    //         'worker_id' => $insert_id,
-                    //         'shop_id' => $shop_id,
-                    //         'worker_day' => $business_hours_day,
-                    //         'from_time' => $f_start,
-                    //         'to_time' => $t_start,
-                    //         'created_at' => date('Y-m-d H:i:s'),
-                    //         'is_active' => 1,
-                    //         'is_deleted' => 0,
-                    //     );
-                    //     if($business_hours_from_time != '' && $business_hours_to_time != ''){
-                    //         $inserted_time = $this->general_model->update_worker_business_hours_availability_time($data1, 'worker_available_time');
-                    //     }
-                    // }
-
-                    // $break_time = $this->input->post('service_time[]');
-                    // foreach ($break_time as $key => $breaks) {
-                    //   $breaks_day = $breaks;
-                    //   $breaks_from_time = $this->input->post('break_Monday1');
-                    //   $breaks_to_time = $this->input->post('break_Monday2');
-                    //
-                    //   $b_f_start = date("H:i", strtotime($breaks_from_time));
-                    //   $b_t_start = date("H:i", strtotime($breaks_to_time));
-                    //
-                    //     $data2 = array(
-                    //         'shop_id' => $insert_id,
-                    //         'day' => $breaks_day,
-                    //         'from_time' => $b_f_start,
-                    //         'to_time' => $b_t_start,
-                    //         'created_at' => date('Y-m-d H:i:s'),
-                    //         'is_active' => 1,
-                    //         'is_deleted' => 0,
-                    //     );
-                    //     if($breaks_from_time != '' && $breaks_to_time != ''){
-                    //         $inserted_time = $this->general_model->update_breaks_availability_time($data2, 'breaks');
-                    //     }
-                    // }
+                  
                     if($insert_worker_vacation){
-                      $this->session->set_flashdata('success_message', "Worker added successfully");
-                      redirect('worker', 'refresh');
+                    
+                        $this->response([
+                         'status' => TRUE, 
+                         'message' => 'Worker added successfully'
+                             ], REST_Controller::HTTP_OK);
+
                     }else{
-                      $this->session->set_flashdata('error_message', "Sorry, something went wrong. please try again");
-                      redirect('worker', 'refresh');
+                      
+                       $this->response([
+                                'status' => FALSE,
+                                'message' => 'Sorry, something went wrong.'
+                            ], REST_Controller::HTTP_NOT_FOUND);
                     }
                   }else{
-                     $this->session->set_flashdata('error_message', "Sorry, something went wrong. please try again");
-                     redirect('worker', 'refresh');
+
+                     $this->response([
+                                'status' => FALSE,
+                                'message' => 'Sorry, something went wrong.'
+                            ], REST_Controller::HTTP_NOT_FOUND);
+
+                     
                   }
               }
           }else {
-            $this->session->set_flashdata('error_message', "Something wents wrong!");
-            redirect('worker', 'refresh');
+            $this->response([
+                                'status' => FALSE,
+                                'message' => 'Sorry, something went wrong.'
+                            ], REST_Controller::HTTP_NOT_FOUND);
           }
         }else{
-          redirect('profile', 'refresh');
+          $this->response([
+                                'status' => FALSE,
+                                'message' => 'Sorry, something went wrong.'
+                            ], REST_Controller::HTTP_NOT_FOUND);
         }
-      }
+      
     }
 
-    // public function test(){
-    //   $u_data = array(
-    //       'firstname' => 'Rahul',
-    //       'email' => 'rahulparmar56@gmail.com',
-    //       'password' => '123456',
-    //       'user_id' => '1',
-    //       'worker_id' => '2',
-    //   );
-    //   $emailsend = $this->general_model->send_worker_permission_email($u_data);
-    //   echo $emailsend;exit;
-    // }
+   
 
     public function uploadImage($path, $imagename, $upload_path){
       $this->load->library('upload');
@@ -720,208 +654,7 @@ class Worker extends MY_Controller {
         }
       }
     }
-    // public function update_worker($id1) {
-    //   if (!$this->session->userdata('uid')) {
-    //     redirect(site_url());
-    //   }
-    //   else{
-    //     $id = $this->session->userdata('uid');
-    //     $user_list = $this->general_model->get_user_data('*', 'user', array('id' => $id, 'is_active' => 1));
-    //     $this->data['userlist'] = $user_list;
-    //
-    //     if($user_list->u_category == 2 || $user_list->u_category == 3){
-    //       $id1 = $this->url_decrypt($id1);
-    //       if ($this->input->post()) {
-    //           $this->load->helper('form');
-    //           $this->load->library('form_validation');
-    //           $this->form_validation->set_rules('worker_name', 'Worker Name', 'required');
-    //           $this->form_validation->set_rules('worker_mobile', 'Worker Title', 'required');
-    //           $this->form_validation->set_rules('worker_email', 'Worker Email', 'required|valid_email');
-    //           if ($this->form_validation->run() == false) {
-    //               $this->session->set_flashdata('error_message', "Please fill required fields.");
-    //               $this->session->set_userdata('USER_DETAIL', $_POST);
-    //               redirect('worker/edit_worker/'.$id1, 'refresh');
-    //           } else {
-    //             $worker_id = $this->input->post('worker_id');
-    //             $worker_name = $this->input->post('worker_name');
-    //             $worker_email = $this->input->post('worker_email');
-    //             $mobile_no = $this->input->post('worker_mobile');
-    //             $percentage = $this->input->post('worker_percentage');
-    //             $shop_id = $this->input->post('radiog_list');
-    //             $all_day = $this->input->post('all_day');
-    //             $start_time = $this->input->post('start_time');
-    //             $end_time = $this->input->post('end_time');
-    //
-    //             $chk_vacation_module = $this->input->post('chk_vacation_module');
-    //             $worker_permission = $this->input->post('worker_permission');
-    //             $shop_permission = $this->input->post('shop_permission');
-    //             $services_permission = $this->input->post('services_permission');
-    //
-    //             if($chk_vacation_module != ''){
-    //               if($start_time == '' && $end_time == ''){
-    //                 $b_f_start = '00:00:00';
-    //                 $b_t_start = '23:59:00';
-    //               }else{
-    //                 $b_f_start = date("H:i:s", strtotime($start_time));
-    //                 $b_t_start = date("H:i:s", strtotime($end_time));
-    //               }
-    //               if($all_day != ''){
-    //                 $main_all_day = '1';
-    //               }else{
-    //                 $main_all_day = '0';
-    //               }
-    //
-    //               $v_md_start_date = $this->input->post('start_date_v_module');
-    //               $v_md_end_date = $this->input->post('end_date_v_module');
-    //               $parts1 = explode('-', $v_md_start_date);
-    //               $s_date = $parts1[1] . '-' . $parts1[0] . '-' . $parts1[2];
-    //               $vacation_md_start_date = date("Y-m-d", strtotime($s_date));
-    //               $parts2 = explode('-', $v_md_end_date);
-    //               $e_date = $parts2[1] . '-' . $parts2[0] . '-' . $parts2[2];
-    //               $vacation_md_end_date = date("Y-m-d", strtotime($e_date));
-    //
-    //               $main_start_date = $vacation_md_start_date.' '.$b_f_start;
-    //               $main_end_date = $vacation_md_end_date.' '.$b_t_start;
-    //
-    //               $data_vacation_module = array(
-    //                   'shop_id' => $worker_id,
-    //                   'start_date' => $main_start_date,
-    //                   'end_date' => $main_end_date,
-    //                   'all_day' => $main_all_day,
-    //                   'flag' => 2,
-    //                   'created_at' => date('Y-m-d H:i:s'),
-    //                   'updated_at' => date('Y-m-d H:i:s'),
-    //                   'is_deleted' => 0
-    //               );
-    //               $vacation_id = $this->general_model->insert_user($data_vacation_module, 'vacation_module');
-    //             }
-    //
-    //             $image = $this->upload_worker_Image($_FILES['imgupload']['name'], 'imgupload', 'worker_image', $worker_id);
-    //             $data = array(
-    //                 'name' => $worker_name,
-    //                 'email' => $worker_email,
-    //                 'mobile' => $mobile_no,
-    //                 'percentage' => $percentage,
-    //                 'shop_id' => $shop_id,
-    //                 'image' => $image,
-    //                 'updated_at' => date('Y-m-d H:i:s'),
-    //                 'is_active' => 1,
-    //                 'is_deleted' => 0,
-    //             );
-    //             $updated_id = $this->general_model->update_worker_data($data, 'workers', array('id' => $worker_id));
-    //
-    //             if($worker_permission != '' || $shop_permission != '' || $services_permission != ''){
-    //               $final_worker_permission = $worker_permission == '' ? 0 : 1;
-    //               $final_shop_permission = $shop_permission == '' ? 0 : 1;
-    //               $final_services_permission = $services_permission == '' ? 0 : 1;
-    //               // echo $final_shop_permission."-".$final_worker_permission."-".$final_services_permission; exit;
-    //               $worker_data = array(
-    //                   'shop_permission' => $final_shop_permission,
-    //                   'worker_permission' => $final_worker_permission,
-    //                   'services_permission' => $final_services_permission
-    //               );
-    //               $updated_id = $this->general_model->update_worker_data($worker_data, 'workers', array('id' => $worker_id));
-    //
-    //               $password_string = '!@#$%*&abcdefghijklmnpqrstuwxyzABCDEFGHJKLMNPQRSTUWXYZ23456789';
-    //               $password = substr(str_shuffle($password_string), 0, 12);
-    //
-    //               $user_data = array(
-    //                   'p_id' => $id,
-    //                   'firstname' => $worker_name,
-    //                   'email' => $worker_email,
-    //                   'password' => md5($password),
-    //                   'mobile' => $mobile_no,
-    //                   'u_category' => 2,
-    //                   'date' => date('Y-m-d H:i:s'),
-    //                   'updated_date' => date('Y-m-d H:i:s'),
-    //                   'is_active' => 0,
-    //                   'is_deleted' => 0,
-    //               );
-    //               $insert_user_id = $this->general_model->insert_worker_data($user_data, 'user');
-    //               $user_id =  $this->url_encrypt($insert_user_id);
-    //               $worker_id =  $this->url_encrypt($worker_id);
-    //
-    //               $u_data = array(
-    //                   'firstname' => $worker_name,
-    //                   'email' => $worker_email,
-    //                   'password' => $password,
-    //                   'user_id' => $user_id,
-    //                   'worker_id' => $worker_id,
-    //               );
-    //               $emailsend = $this->general_model->send_worker_permission_email($u_data);
-    //             }
-    //
-    //               if($shop_id){
-    //                 $service_time = $this->input->post('service_time[]');
-    //                 // $business_hours_from_time = $this->input->post('Monday1');
-    //                 // $business_hours_to_time = $this->input->post('Monday2');
-    //                 //
-    //                 // if($business_hours_from_time != '' && $business_hours_to_time != ''){
-    //                 //   $inserted_time = $this->general_model->delete_worker_hours_time('worker_available_time', array('worker_id' => $worker_id));
-    //                 // }
-    //
-    //                 foreach ($service_time as $key => $value) {
-    //                   $business_hours_day = $value;
-    //                   $business_hours_from_time = $this->input->post('Monday1');
-    //                   $business_hours_to_time = $this->input->post('Monday2');
-    //
-    //                   $f_start = date("H:i", strtotime($business_hours_from_time));
-    //                   $t_start = date("H:i", strtotime($business_hours_to_time));
-    //
-    //                     $data1 = array(
-    //                         'worker_id' => $worker_id,
-    //                         'shop_id' => $shop_id,
-    //                         'worker_day' => $business_hours_day,
-    //                         'from_time' => $f_start,
-    //                         'to_time' => $t_start,
-    //                         'updated_at' => date('Y-m-d H:i:s'),
-    //                         'is_active' => 1,
-    //                         'is_deleted' => 0,
-    //                     );
-    //                     if($business_hours_from_time != '' && $business_hours_to_time != ''){
-    //                         $inserted_time = $this->general_model->update_worker_business_hours_availability_time($data1, 'worker_available_time');
-    //                     }
-    //                 }
-    //
-    //                 $break_time = $this->input->post('service_time[]');
-    //                 foreach ($break_time as $key => $breaks) {
-    //                   $breaks_day = $breaks;
-    //                   $breaks_from_time = $this->input->post('break_Monday1');
-    //                   $breaks_to_time = $this->input->post('break_Monday2');
-    //
-    //                   $b_f_start = date("H:i", strtotime($breaks_from_time));
-    //                   $b_t_start = date("H:i", strtotime($breaks_to_time));
-    //
-    //                     $data2 = array(
-    //                         'shop_id' => $worker_id,
-    //                         'day' => $breaks_day,
-    //                         'from_time' => $b_f_start,
-    //                         'to_time' => $b_t_start,
-    //                         'updated_at' => date('Y-m-d H:i:s'),
-    //                         'is_active' => 1,
-    //                         'is_deleted' => 0,
-    //                     );
-    //                     if($breaks_from_time != '' && $breaks_to_time != ''){
-    //                         $inserted_time = $this->general_model->update_breaks_availability_time($data2, 'breaks');
-    //                     }
-    //                 }
-    //
-    //                 $this->session->set_flashdata('success_message', "Worker updated successfully");
-    //                 redirect('worker', 'refresh');
-    //               }else{
-    //                  $this->session->set_flashdata('error_message', "Sorry, something went wrong. please try again");
-    //                  redirect('worker', 'refresh');
-    //               }
-    //           }
-    //       } else {
-    //           $this->session->set_flashdata('error_message', "Something wents wrong!");
-    //           redirect('worker', 'refresh');
-    //       }
-    //     }else{
-    //       redirect('profile', 'refresh');
-    //     }
-    //   }
-    // }
+
 
     public function upload_worker_Image($path, $imagename, $upload_path, $worker_id){
       $this->load->library('upload');
@@ -966,12 +699,12 @@ class Worker extends MY_Controller {
       }
     }
 
-    public function checkUniqueadd_email($table, $columnName)
+    public function checkUniqueadd_email_post()
     {
       $email = $_POST['worker_email'];
       if(!empty($email)) {
-        $this->db->select($columnName);
-        $this->db->from($table);
+        $this->db->select('id');
+        $this->db->from('workers');
         $this->db->where('email',$email);
         $count = $this->db->get()->row();
         $count = count($count);
@@ -985,15 +718,27 @@ class Worker extends MY_Controller {
           $count1 = (int)$count1;
 
           if($count1 > 0){
-            echo 'false';
-          }else{
-            echo 'true';
+           $this->response([
+                                    'status' => FALSE,
+                                    'message' => 'Already exists.'
+                                ], REST_Controller::HTTP_NOT_FOUND);
+           }else{
+             echo 'true';
+              $this->response([
+                         'status' => TRUE
+                             ], REST_Controller::HTTP_OK);
          }
         }else{
           if($count > 0){
-            echo 'false';
-          }else{
-            echo 'true';
+           $this->response([
+                                    'status' => FALSE,
+                                    'message' => 'Already exists.'
+                                ], REST_Controller::HTTP_NOT_FOUND);
+           }else{
+             echo 'true';
+              $this->response([
+                         'status' => TRUE
+                             ], REST_Controller::HTTP_OK);
          }
         }
      }
@@ -1125,24 +870,23 @@ class Worker extends MY_Controller {
        $hours_id = $this->db->delete('vacation_module');
       }
 
-      public function get_worker_shop_services()
+      public function get_worker_shop_services_post()
       {
 
-       $all_shop_id = $this->input->post('datastring');
-     
-        $arrlength = count($all_shop_id);
+       $all_shop_id = $this->input->post('shop_id');
+       
+       $arrlength = count($all_shop_id);
       
         $main_filter_shop_list_id = array();
        for($x = 0; $x < $arrlength; $x++) {
 
         $main_filter_shop_list = $this->db->select('shop.*')->from('shop')->where('shop.is_deleted','0')->where('shop.id',$all_shop_id[$x])->get()->result();
-        //print_r ($main_filter_shop_list[0]->service_id);
-      
+        
          $main_filter_shop_list_id[] = $main_filter_shop_list[0]->service_id;
-          //print_r($main_filter_shop_list_id);
-         // $main_filter_service_list[] = $this->db->select('services.*, category.parent_id,cat_name')->from('services')->where('services.is_deleted','0')->where('services.id',$main_filter_shop_list[0]->service_id)->join('category', 'services.cat_id=category.category_id', 'left')->get()->result_array();
+        
 
         }
+       // print_r($main_filter_shop_list);
           $aa = implode(",", $main_filter_shop_list_id);
          
           $bb = explode(",",$aa);
@@ -1151,7 +895,12 @@ class Worker extends MY_Controller {
       foreach($cc as $new_service_myid){
            $main_filter_service_list[] = $this->db->select('services.*, category.parent_id,cat_name')->from('services')->where('services.is_deleted','0')->where('services.id',$new_service_myid)->join('category', 'services.cat_id=category.category_id', 'left')->get()->result_array();
          }
-       echo json_encode($main_filter_service_list);
+       
+
+        $this->response([
+                                'status' => TRUE,
+                                'data' => $main_filter_service_list
+                            ], REST_Controller::HTTP_OK);
 
       }
 

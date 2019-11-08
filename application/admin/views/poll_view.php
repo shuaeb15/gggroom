@@ -30,7 +30,7 @@ padding:5px;
 } */
 </style>
 <?php
-// echo '<pre>'; print_r($poll_data); exit; ?>
+//echo '<pre>'; print_r($poll_data); exit; ?>
 <div class="right_col" role="main" style="min-height: 959px;">
   <div class="">
     <div class="page-title">
@@ -73,14 +73,17 @@ padding:5px;
                              <input type="text" name="question-<?=$v['qst_id']?>" value="<?=($v['qst']) && $v['qst'] != '' ? $v['qst'] : ''?>" class="form-control">
                              <br>
                              <select class="form-control questionDiv" name="queOption-<?=$v['qst_id']?>" id="queOption<?=$v['qst_id']?>" data-value="<?=$v['qst_id']?>" onchange="changeOption(<?=$v['qst_id']?>, this.value);">
-                               <option value="1">Radio Button</option>
+                               <option value="1" <?=($v['textbox'] == '1')  ? 'selected="selected"' : ''?>>Radio Button</option>
                                <option value="2" <?=($v['textbox'] == '2') || $v['textbox'] == '' ? 'selected="selected"' : ''?>>Text Area</option>
                              </select>
                              <br>
                               <div class="col-xs-12 radioGroup" id="option<?=$v['qst_id']?>">
                                 <?php
-                                // echo $v['textbox'].'<br>';
-                                if($v['textbox'] != '' || $v['textbox'] == '1'){ ?>
+                                //  echo $v['textbox'];
+                                if($v['textbox'] != '' || $v['textbox'] == '1'){
+
+                               
+                                  ?>
                                   <div class="col-xs-12 inner-radioGroup<?=$v['qst_id']?>">
                                   <?php
                                   for($i = 1; $i <= 8; $i++) {
@@ -116,9 +119,21 @@ padding:5px;
                       }?>
                       <div class="row x_title">
                         <div class="col-md-9 col-xs-12">
+                          <div class="col-md-2">
+                            <label for="add-option">Poll Status </label>
+                          </div>
+ <div class="col-md-4">
+                          <select class="form-control " name="display" id="queOption<?=$v['qst_id']?>">
+                               <option value="1" <?=($v['display'] == '1')  ? 'selected="selected"' : ''?>>Show</option>
+                               <option value="0" <?=($v['display'] == '0') || $v['textbox'] == '' ? 'selected="selected"' : ''?>>Hide</option>
+                             </select>
+                           </div>
+ <div class="col-md-6">
                            <div class="item form-group">
                               <a href="javascript:void(0);" title="Add New Question" id="add-new-question" style="color:#000; text-decoration:underline; float:right;" data-num="1" onclick="addNewQuestion(<?=($v['qst_id'])?>);">Add New Question</a><i class="fa fa-plus-circle addque" style="float:right;"></i>
                             </div>
+</div>
+
                           </div>
                         </div>
                         <!-- end poll --->

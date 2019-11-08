@@ -361,6 +361,46 @@ class Appointment extends Admin_Controller {
       }
     }
 
+
+public function refund_appointment() {
+      $data = array();
+      if ($_POST['id'] != '') {
+        $sid = $_POST['id'];
+        $refund_date = date();
+
+        $data2 = array(
+          'is_deleted' => 0,
+          'refund' => 'yes',
+          'refund_date' => $refund_date,
+        );
+        $update_id = $this->general_model->active_appointment($data2, 'appointment', array('id' => $sid));
+        $appointment_list = $this->general_model->get_appointment_data_id('order_id,user_id,price', 'appointment', array('id' => $sid));
+
+         $wallet_list = $this->general_model->get_appointment_data_id('wallet', 'appointment', array('id' => $$appointment_list->user_id));
+
+        $data1 = array(
+          'wallet' => $appointment_list->price +  $wallet_list->wallet
+          
+        );
+        $order_id = $this->general_model->active_appointment($data1, 'user', array('id' => $appointment_list->user_id));
+        // $email_data = $this->general_model->get_order_booking_data('*', 'appointment', array('order_id' => trim($appointment_list->order_id), 'is_deleted' => 0));
+
+        // $emailsend = $this->general_model->appointment_book_sendConfirmationEmail($email_data);
+
+          if (isset($update_id)) {
+              $data['success'] = 'success';
+              $data['id'] = $sid;
+              echo json_encode($data);
+              exit;
+          }
+      } else {
+          $data['unsuccess'] = 'unsuccess';
+          echo json_encode($data);
+          exit;
+      }
+    }
+
+
     public function get_worker_time_check(){
       $worker_id = $this->input->post('worker_id');
       $time = $this->input->post('from_time');

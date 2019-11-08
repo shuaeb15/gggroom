@@ -66,6 +66,7 @@ padding:5px;
                       <?php
                       $j=1;
                       // echo '<pre>'; print_r($poll_data);exit;
+                      if (!empty($poll_data)){
                       foreach($poll_data as $key=>$value){
                       ?>
                       <div class="row x_title mainQuestionDiv">
@@ -109,7 +110,7 @@ padding:5px;
                       </div>
                       <?php
                       $j++;
-                      }?>
+                      } }?>
                         <!-- end poll --->
                       </form>
                     </div>

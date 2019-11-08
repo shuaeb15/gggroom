@@ -12,6 +12,7 @@ class Profile extends MY_Controller {
         parent::__construct();
         $this->load->helper(array('url'));
         $this->load->model('general_model');
+
     }
 
     /**
@@ -39,6 +40,10 @@ class Profile extends MY_Controller {
         $userlist = $this->general_model->get_edit_user_data('user', array('user.id' => $id, 'user.is_deleted' => 0));
         $this->data['userlist'] = $userlist;
 
+        $display = $this->general_model->display_poll();
+       $this->data['display'] = $display;
+        
+
         // echo '<pre>';print_r($cat_data);exit;
         $var =  $this->url_encrypt($userlist->id);
         $userlist->encrypt_id = $var;
@@ -46,6 +51,7 @@ class Profile extends MY_Controller {
         $appointmentData = $this->general_model->get_all_general_data('id','appointment',array('user_id' => $id,'is_deleted'=>0));
         $favData = $this->general_model->get_all_general_data('id','favourite',array('user_id' => $id));
         $this->data['userlist'] = $userlist;
+        $this->data['display'] = $display;
         $this->data['title'] = 'Profile | GGG Rooms';
         $this->data['appointmentCount'] = count($appointmentData);
         $this->data['favCount'] = count($favData);
@@ -220,7 +226,7 @@ class Profile extends MY_Controller {
 
       $config = array();
       $config['upload_path']          = FCPATH.'assets/uploads/'.$upload_path.'/';
-      $config['file_name'] 						= $temp_name;
+      $config['file_name']            = $temp_name;
       $config['allowed_types']        = 'gif|jpg|jpeg|png';
       // $config['max_size']             = 2000;
       // $config['max_width']            = 485;
@@ -251,21 +257,21 @@ class Profile extends MY_Controller {
     }
 
     // public function resizeImage($file_name)
-  	//  {
-  	// 		$this->load->library('image_lib');
-  	// 	 	$config['image_library']  = 'GD2';
-  	// 	 	$config['source_image']   = FCPATH. '/assets/uploads/profile_image/' . $file_name;
+    //  {
+    //    $this->load->library('image_lib');
+    //    $config['image_library']  = 'GD2';
+    //    $config['source_image']   = FCPATH. '/assets/uploads/profile_image/' . $file_name;
     //     $config['new_image']      = FCPATH. '/assets/uploads/profile_image/thumbnail/' . $file_name;
-  	// 			// $config['create_thumb']   = TRUE;
-  	// 	 	$config['maintain_ratio'] = TRUE;
-  	// 	 	$config['width']          = 485;
-  	// 	 	$config['height']         = 485;
+    //      // $config['create_thumb']   = TRUE;
+    //    $config['maintain_ratio'] = TRUE;
+    //    $config['width']          = 485;
+    //    $config['height']         = 485;
     //
-  	// 	 	$this->image_lib->initialize($config);
-  	// 	 	if (! $this->image_lib->resize()) {
-  	// 			 echo $this->image_lib->display_errors();exit;
-  	// 	 	}
-  	//  }
+    //    $this->image_lib->initialize($config);
+    //    if (! $this->image_lib->resize()) {
+    //       echo $this->image_lib->display_errors();exit;
+    //    }
+    //  }
 
     public function checkUnique($table, $columnName)
    {
@@ -377,8 +383,9 @@ class Profile extends MY_Controller {
         }
         public function get_poll_data()
         {
-          $get_data = $this->general_model->get_all_general_data('*','poll_qst', array('display' => '0'));
-          // echo json_encode($get_data);exit;
+          $get_data = $this->general_model->get_all_general_data('*','poll_qst', array('display' => '1'));
+          //echo json_encode($get_data);
+          //exit;
           // echo '<pre>'; print_r($get_data); exit;
           // echo '<pre>'; print_r($this->session->userdata('uid')); exit;
             echo '<form name="submit_poll" id="submit_poll" method="post" data-toggle="validator" action="'.site_url("Profile/insert_poll").'"><div id="slider" class="form">
@@ -392,7 +399,7 @@ class Profile extends MY_Controller {
                    <div class="item form-group">
                      <h1 for="">'.$v['qst'].'</h1>';
                      echo '<input type="hidden" name="qst_id[]" value="'.$v['qst_id'].'">';
-                     if($v['textbox'] == ''){
+                     if($v['textbox'] == '1'){
                        for($i = 1; $i <= 4; $i++){
                          if($v['opt'.$i] && $v['opt'.$i] != ''){
                            echo '<div class="col-xs-12 inner-radioGroup'.$v['qst_id'].'">
@@ -441,7 +448,7 @@ class Profile extends MY_Controller {
           }
           // exit;
           // echo count($data['qst']);exit;
-          // echo '<pre>'; print_r($data); exit;
+          //echo '<pre>'; print_r($data); exit;
           $count = count($data['qst']);
           for($i = 0; $i < $count; $i++){
             $newData['user_id'] = $_POST['user_id'];

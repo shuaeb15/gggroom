@@ -48,11 +48,12 @@
 <script type="text/javascript">
   $( document ).ready(function() {
     var poll_submit = '<?=$userlist->poll_submit?>';
+    var poll_display = '<?=$display->display?>';
       var options = {
-    			modal: true,
-    			height:300,
-    			width:500
-  		};
+          modal: true,
+          height:300,
+          width:500
+      };
       var optionsSlider = {
         width:760,//width of slider
         height:400,//height of slider
@@ -67,11 +68,13 @@
         speed:600,//slider speed
 
       };
-    	$('#demo-modal').load('<?php echo base_url(); ?>Profile/get_poll_data?modal=test',
+      $('#demo-modal').load('<?php echo base_url(); ?>Profile/get_poll_data?modal=test',
       function(data) {
         if(poll_submit == '0'){
-  		    $('#bootstrap-modal').modal({show:true});
-        	$('#slider').jFormslider(optionsSlider);
+          if(poll_display == '1'){
+          $('#bootstrap-modal').modal({show:true});
+          $('#slider').jFormslider(optionsSlider);
+        }
         }
       });
 
@@ -110,6 +113,7 @@
     return true;
   }
 </script>
+
 <div class="modal fade" id="bootstrap-modal" role="dialog">
   <div class="modal-dialog">
       <!-- Modal content-->
@@ -126,6 +130,7 @@
       </div>
   </div>
 </div>
+
 <section class="block">
   <div class="container">
   </div>
@@ -205,6 +210,10 @@
             <div class="col-md-4 col-xs-12 cls_favorite_view">
                 <h3 style="margin-top:0px;margin-bottom:0px;">Favorites</h3>
                 <p style="padding-top: 0px;"><?php echo $favCount; ?></p>
+            </div>
+            <div class="col-md-4 col-xs-12 cls_favorite_view">
+                <h3 style="margin-top:0px;margin-bottom:0px;">Wallet</h3>
+                <p style="padding-top: 0px;"><?php echo $userlist->wallet; ?></p>
             </div>
           </div>
          </div>

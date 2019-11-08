@@ -122,28 +122,28 @@ public function get_user_data_asc($field = "", $table_name = "", $where_cond = a
             </body>
             </html>";
 
-			$this->load->library('email');
-			$this->email->initialize(array(
-				'protocol' => 'mail',
-				'smtp_host' => 'smtp.sendgrid.net',
-				'smtp_user' => 'pratikvekariya',
-				'smtp_pass' => 'pratik123#',
-				'smtp_port' => 587,
-				'crlf' => "\r\n",
-				'newline' => "\r\n"
-				));
+            $this->load->library('email');
+            $this->email->initialize(array(
+                'protocol' => 'smtp',
+                'smtp_host' => 'smtp.sendgrid.net',
+                'smtp_user' => 'pratikvekariya',
+                'smtp_pass' => 'pratik123#',
+                'smtp_port' => 587,
+                'crlf' => "\r\n",
+                'newline' => "\r\n"
+                ));
           $this->email->set_mailtype("html");
-			$this->email->from('info@gggroom.com');
-			$this->email->to($receive);
-			$this->email->subject('Registration');
-			$this->email->message($message);
-			if($this->email->send())
-			{
-				return true;
-			}else{
-				return false;
-			}
-		}
+            $this->email->from('info@gggroom.com');
+            $this->email->to($receive);
+            $this->email->subject('Registration');
+            $this->email->message($message);
+            if($this->email->send())
+            {
+                return true;
+            }else{
+                return false;
+            }
+        }
 
 // dashboard
     public function get_all_general_data($field = "", $table_name = "", $where_cond = array(), $return = "result_array", $order_by = "", $limit = "", $groupby = "") {
@@ -565,7 +565,7 @@ public function get_user_data_asc($field = "", $table_name = "", $where_cond = a
             </html>";
       // echo $message;exit;
       $this->email->initialize(array(
-        'protocol' => 'mail',
+        'protocol' => 'smtp',
         'smtp_host' => 'smtp.sendgrid.net',
         'smtp_user' => 'pratikvekariya',
         'smtp_pass' => 'pratik123#',
@@ -585,7 +585,7 @@ public function get_user_data_asc($field = "", $table_name = "", $where_cond = a
       }else{
         return false;
       }
-		}
+        }
 
     //page
     public function get_page_data($field = "", $table_name = "", $where_cond = array()) {
@@ -912,7 +912,7 @@ public function get_user_data_asc($field = "", $table_name = "", $where_cond = a
 
       $this->load->library('email');
       $this->email->initialize(array(
-        'protocol' => 'mail',
+        'protocol' => 'smtp',
         'smtp_host' => 'smtp.sendgrid.net',
         'smtp_user' => 'pratikvekariya',
         'smtp_pass' => 'pratik123#',
@@ -952,28 +952,28 @@ public function get_user_data_asc($field = "", $table_name = "", $where_cond = a
             </body>
             </html>";
 
-			$this->load->library('email');
-			$this->email->initialize(array(
-				'protocol' => 'mail',
-				'smtp_host' => 'smtp.sendgrid.net',
-				'smtp_user' => 'pratikvekariya',
-				'smtp_pass' => 'pratik123#',
-				'smtp_port' => 587,
-				'crlf' => "\r\n",
-				'newline' => "\r\n"
-				));
+            $this->load->library('email');
+            $this->email->initialize(array(
+                'protocol' => 'smtp',
+                'smtp_host' => 'smtp.sendgrid.net',
+                'smtp_user' => 'pratikvekariya',
+                'smtp_pass' => 'pratik123#',
+                'smtp_port' => 587,
+                'crlf' => "\r\n",
+                'newline' => "\r\n"
+                ));
       $this->email->set_mailtype("html");
-			$this->email->from('info@gggroom.com');
-			$this->email->to($receive);
-			$this->email->subject('Registration');
-			$this->email->message($message);
-			if($this->email->send())
-			{
-				return true;
-			}else{
-				return false;
-			}
-		}
+            $this->email->from('info@gggroom.com');
+            $this->email->to($receive);
+            $this->email->subject('Registration');
+            $this->email->message($message);
+            if($this->email->send())
+            {
+                return true;
+            }else{
+                return false;
+            }
+        }
 
     public function get_admin_user_data($field = "", $table_name = "", $where_cond = array()) {
         $this->db->select('admin.*, role.role_name');
@@ -1010,28 +1010,28 @@ public function get_user_data_asc($field = "", $table_name = "", $where_cond = a
             </body>
             </html>";
 
-			$this->load->library('email');
-			$this->email->initialize(array(
-				'protocol' => 'mail',
-				'smtp_host' => 'smtp.sendgrid.net',
-				'smtp_user' => 'pratikvekariya',
-				'smtp_pass' => 'pratik123#',
-				'smtp_port' => 587,
-				'crlf' => "\r\n",
-				'newline' => "\r\n"
-				));
+            $this->load->library('email');
+            $this->email->initialize(array(
+                'protocol' => 'smtp',
+                'smtp_host' => 'smtp.sendgrid.net',
+                'smtp_user' => 'pratikvekariya',
+                'smtp_pass' => 'pratik123#',
+                'smtp_port' => 587,
+                'crlf' => "\r\n",
+                'newline' => "\r\n"
+                ));
       $this->email->set_mailtype("html");
-			$this->email->from('info@gggroom.com');
-			$this->email->to($receive);
-			$this->email->subject('Shop Account Created');
-			$this->email->message($message);
-			if($this->email->send())
-			{
-				return true;
-			}else{
-				return false;
-			}
-		}
+            $this->email->from('info@gggroom.com');
+            $this->email->to($receive);
+            $this->email->subject('Shop Account Created');
+            $this->email->message($message);
+            if($this->email->send())
+            {
+                return true;
+            }else{
+                return false;
+            }
+        }
 
     public function get_payment_data($field = "", $table_name = "",$where_cond = array())
     {
@@ -1129,7 +1129,7 @@ public function get_user_data_asc($field = "", $table_name = "", $where_cond = a
       </body></html>";
       // echo $message;exit;
       $this->email->initialize(array(
-        'protocol' => 'mail',
+        'protocol' => 'smtp',
         'smtp_host' => 'smtp.sendgrid.net',
         'smtp_user' => 'pratikvekariya',
         'smtp_pass' => 'pratik123#',

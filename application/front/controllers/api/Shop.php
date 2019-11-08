@@ -1084,23 +1084,29 @@ class Shop extends REST_Controller {
             }
           }
 
-          public function checkUniqueadd_email($table, $columnName)
+          public function checkUniqueadd_email_post()
           {
             $email = $_POST['shop_email'];
-            $id = $this->session->userdata('uid');
+            $id = $this->input->post('uid');
 
               if(!empty($email)) {
-                   $this->db->select($columnName);
-                   $this->db->from($table);
+                   $this->db->select('id');
+                   $this->db->from('shop');
                    $this->db->where('shop_email',$email);
                    $this->db->where('user_id',$id);
                    $count = $this->db->get()->row();
                    $count = count($count);
                    $count = (int)$count;
                    if($count > 0){
-                      echo 'false';
-                   }else{
-                     echo 'true';
+                     $this->response([
+                                    'status' => FALSE,
+                                    'message' => 'Already exists.'
+                                ], REST_Controller::HTTP_NOT_FOUND);
+           }else{
+             echo 'true';
+              $this->response([
+                         'status' => TRUE
+                             ], REST_Controller::HTTP_OK);
                    }
                  }
           }

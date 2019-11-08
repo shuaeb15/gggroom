@@ -68,17 +68,26 @@ class Poll extends Admin_Controller {
           $admin_id = $this->session->userdata('admin_id');
           $admin_data = $this->general_model->get_all_general_data("*", "admin", array('is_deleted' => 0, 'id' => $admin_id), 'result_array');
           $this->data['admin_data'] = $admin_data;
-            // echo '<pre>'; print_r($_POST);
+           //echo '<pre>'; print_r($_POST); 
+           //die();
             $data = array();
             $sumArray = array();
             $i = 0;
+           
             foreach($_POST as $k=>$v){
               $newarr = explode('-',$k);
-              // echo '<pre>'; print_r($newarr[0]); exit;
+               //echo '<pre>'; print_r($newarr[0]); 
+               //exit;
               // $newarr = substr($k,0, -1);
+               
               if($newarr[0] == 'question'){
                 // echo $v.'<br>';
                 $sumArray[$newarr[1]]['qst'] = $v;
+                 $sumArray[$newarr[1]]['qst_id'] = substr($k,9);
+                 $sumArray[$newarr[1]]['display'] = $this->input->post('display');
+
+                
+
               }
               if($newarr[0] == 'queOption'){
                 // echo $v.'<br>';
@@ -89,10 +98,13 @@ class Poll extends Admin_Controller {
                 // echo $newarr[2].'<br>';
                 $sumArray[$newarr[1]]['opt'.$newarr[2]] = $v;
               }
-              $i++;
+              
+               $i++;
             }
-            // echo count($sumArray['question']);exit;
-            // echo '<pre>'; print_r($sumArray);exit;
+           // echo count($sumArray['question']);
+           // exit;
+             //echo '<pre>'; print_r($sumArray);
+           //exit;
             $this->db->truncate('poll_qst');
             $succ = array();
             $i=1;
@@ -170,8 +182,17 @@ class Poll extends Admin_Controller {
           // echo '<pre>'; print_r($get_poll_data_by_id);exit;
           $data[$key] = $get_poll_data_by_id;
         }
-        // echo '<pre>'; print_r($data);exit;
+         //echo '<pre>'; print_r($data);
+         //exit;
+       
+        if(count($data) > 0){
         $this->data['poll_data'] = $data;
+        }
+        else
+        {
+         $this->data['poll_data'] = "";
+        }
+
         // $this->data['num_of_data'] = count($poll_data);
         // echo count($poll_data);exit;
         $this->render('poll_data_view');

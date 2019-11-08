@@ -660,7 +660,7 @@ class Appointment extends MY_Controller {
       }
   }
 
-  public function get_select_service(){
+  public function get_select_service(){ 
       $service_id = $_POST['id'];
       $s_id = implode(",", $service_id);
       $service_list = $this->general_model->get_select_service_data( 'services', array('services.is_deleted' => 0, 'user.u_category' => 2), $service_id);

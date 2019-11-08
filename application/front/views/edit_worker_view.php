@@ -38,7 +38,7 @@
       <div class="col-xs-12 col-sm-12">
     	   <div class="multistepform">
     	   <span class="form-title">EDIT WORKER</span>
-         <span class="form-title" style="font-size:14px;"><a href="<?=DOMAIN_URL?>">Home</a> > <a href="<?=DOMAIN_URL?>worker">Worker</a> > Edit Worker</span>
+         <span class="form-title" style="font-size:14px;"><a href="<?=DOMAIN_URL?>">Home</a> > <a href="<?=base_url();?>worker">Worker</a> > Edit Worker</span>
     			<div class="container">
   					<main>
             <!-- <a href="http://localhost/ggg/service" class="back_btn"><span><< Go back</span></a> -->
@@ -49,13 +49,16 @@
     			  <label for="tab2">SELECT SHOP</label>
 
     			  <input id="tab3" type="radio" name="tabs">
-    			  <label for="tab3">SELECT BUSINESS HOURS</label>
+    			  <label for="tab3"> BUSINESS HOURS</label>
 
             <input id="tab4" type="radio" name="tabs">
     			  <label for="tab4">BREAK TIMES</label>
 
     			  <input id="tab5" type="radio" name="tabs">
     			  <label for="tab5">VACATION</label>
+
+             <input id="tab6" type="radio" name="tabs">
+            <label for="tab6"> SERVICE</label>
               <br>
       			  <section id="content1">
                 <form enctype="multipart/form-data" method="post"  id="add_worker" name="add_worker" data-toggle="validator" action="<?php echo site_url("worker/update_worker/$workerlist->encrypt_id"); ?>">
@@ -418,6 +421,7 @@
                </div>
             </section>
             <?php date("y-m-d",strtotime($workerlist->vacation_start)); ?>
+
             <section id="content5">
               <div class="edit-form shop-form">
                 <div class="col-md-12 col-xs-12"  style="text-align: center !important;">
@@ -466,18 +470,116 @@
                 </div>
                 <div class="col-md-10">
                   <button type="button" id="prev4" class="buttons shopbutton left">Prev</button>
-                  <button type="submit" id="submitButton" class="buttons shopbutton right">Submit</button>
+                   <button type="button" id="next5" class="buttons shopbutton right">Next</button>
+                <!--   <button type="submit" id="submitButton" class="buttons shopbutton right">Submit</button> -->
                 </div>
-      			    </form>
+      			    
         				</div>
             </section>
+
+            <section id="content6">
+              <div class="edit-form shop-form">
+                <div class="col-md-12 col-xs-12">
+                    <span class="form-title">Select Services <span class="cls_star">*</span></span>
+                </div>
+               
+                      
+
+                  <div class="col-md-12 col-xs-12 margin_bottom_30">
+                    <div class="business_hrs">
+                      <div class="col-md-12 col-xs-12" id="my_worker_service_list">
+
+
+                        <?php 
+
+                        $aa = explode(",", $workerlist->service_id); 
+                      
+
+                        foreach($aa as $new_service_myid){
+           $main_filter_service_list = $this->db->select('services.*, category.parent_id,cat_name')->from('services')->where('services.is_deleted','0')->where('services.id',$new_service_myid)->join('category', 'services.cat_id=category.category_id', 'left')->get()->result_array();
+          //print_r($main_filter_service_list);
+           if(!empty($main_filter_service_list)){
+         ?>
+
+           <div class='col-md-11 col-xs-18'><span><?php echo $main_filter_service_list[0]['service_name']  ?></span><br> <span style='font-size: 16px; color: rgba(0, 0, 0, 0.502);'><?php echo $main_filter_service_list[0]['cat_name']  ?></span></div> <div class='col-md-1 col-xs-6 '><input type='checkbox' name='service_list_all[]' id='radioo<?php echo $main_filter_service_list[0]['id']  ?>' class='css-checkbox' value='<?php echo $main_filter_service_list[0]['id']  ?>' checked><label for='radioo<?php echo $main_filter_service_list[0]['id']  ?>' class='css-label css-label-check'></label></div>
+          
+         <?php }
+          }
+     
+
+                        ?>
+                 
+
+                      </div>
+
+                    </div>
+                  </div>
+                
+            
+                  <div class="col-md-8 col-md-offset-1 policy" style="margin-left: 13%">
+                      <button type="button" id="prev5" class="buttons shopbutton left">Prev</button>
+                     
+
+                      <button type="submit" id="submitButton" class="buttons shopbutton right">Submit</button>
+                  </div>
+                 </form> 
+             </div>
+           </section>
+
+
     	</div>
     </div>
     </div>
   </div>
 </section>
 <script>
+  let dat =<?php echo json_encode($aa); ?>;
+  console.log(dat);
    $(document).ready(function() {
+
+
+
+
+    $('#next2').click(function(){
+
+
+
+       var lang = [];
+
+               $("input[name='shop_name[]']:checked").each(function(){
+                lang.push(this.value);
+            });
+    var datastring = lang;
+
+    $.ajax({
+            url: "<?php echo base_url(); ?>worker/get_worker_shop_services",
+            type: 'post',
+            data: {datastring:datastring},
+            success: function(data){
+              var data1 = JSON.parse(data);
+              console.log(data1);
+              console.log(data1.length);
+             var html = '';
+              for (var i = 0; i < data1.length; i++) {
+             //    html += '<option value="'+ data1[i].category_id +'">'+ data1[i].cat_name +'</option>';
+             // html += '<span>'+ data1[i][0].cat_name +'</span><br>';
+
+              html += "<div class='col-md-11 col-xs-18'><span>"+ data1[i][0].service_name +"</span><br> <span style='font-size: 16px; color: rgba(0, 0, 0, 0.502);'> "+ data1[i][0].cat_name +"</span></div> <div class='col-md-1 col-xs-6 '><input type='checkbox' name='service_list_all[]' id='radioo"+ data1[i][0].id +"' class='css-checkbox' value='"+ data1[i][0].id +"' ><label for='radioo"+ data1[i][0].id +"' class='css-label css-label-check'></label></div>";
+
+              }
+              $('#my_worker_service_list').html(html);
+              for(let i=0;i<dat.length;i++){
+                console.log("here");
+                if(dat[i]!=''){
+                  $('#radioo'+dat[i]).prop("checked",true);
+                }
+              }
+            }
+        });
+
+
+       });
+    
      // $("input[name=shop_name]").click(function(){
      //   var data_id = $(this).attr('data-id');
      //   $("#shop_id").value = data_id;
@@ -592,11 +694,13 @@
      $("#next2").click(function(){   $('#tab3').trigger('click');  });
      $("#next3").click(function(){   $('#tab4').trigger('click');  });
      $("#next4").click(function(){   $('#tab5').trigger('click');  });
+     $("#next5").click(function(){   $('#tab6').trigger('click');  });
 
      $("#prev1").click(function(){   $('#tab1').trigger('click');  });
      $("#prev2").click(function(){   $('#tab2').trigger('click');  });
      $("#prev3").click(function(){   $('#tab3').trigger('click');  });
      $("#prev4").click(function(){   $('#tab4').trigger('click');  });
+    $("#prev5").click(function(){   $('#tab5').trigger('click');  });
 });
 </script>
 <script type="text/javascript">

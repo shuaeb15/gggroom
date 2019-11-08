@@ -335,13 +335,21 @@ class Webservices extends REST_Controller {
   {
       $filter_service_list = $this->general_model->get_filter_service_data( 'services', array('is_deleted' => 0));
       
-         $this->response($filter_service_list, REST_Controller::HTTP_OK);
+       $this->response([
+                                'status' => TRUE,
+                                'data' => $filter_service_list
+                            ], REST_Controller::HTTP_OK);
+        
   }
  
  public function shop_list_get()
  {
     $filter_shop_list = $this->general_model->get_filter_shop_data( 'shop', array('is_deleted' => 0));
-        $this->response($filter_shop_list, REST_Controller::HTTP_OK);
+       
+        $this->response([
+                                'status' => TRUE,
+                                'data' => $filter_shop_list
+                            ], REST_Controller::HTTP_OK);
  }
 
 
@@ -828,5 +836,56 @@ class Webservices extends REST_Controller {
           }
         
       }
+
+
+        public function checkUnique_username_post()
+  {
+   $username = $_POST['username'];
+      if(!empty($username)) {
+
+            $this->db->select('id');
+           $this->db->from('user');
+           $this->db->where('username',$username);
+           $count = $this->db->get()->row();
+           $count = count($count);
+           $count = (int)$count;
+           if($count > 0){
+              $this->response([
+                                    'status' => FALSE,
+                                    'message' => 'Already exists.'
+                                ], REST_Controller::HTTP_NOT_FOUND);
+           }else{
+             echo 'true';
+              $this->response([
+                         'status' => TRUE
+                             ], REST_Controller::HTTP_OK);
+           }
+  }
+  }
+
+  public function checkUnique_email_post()
+ {
+   $email = $_POST['u_email'];
+      if(!empty($email)) {
+
+           $this->db->select('id');
+           $this->db->from('user');
+           $this->db->where('email',$email);
+           $count = $this->db->get()->row();
+           $count = count($count);
+           $count = (int)$count;
+           if($count > 0){
+              $this->response([
+                                    'status' => FALSE,
+                                    'message' => 'Already exists.'
+                                ], REST_Controller::HTTP_NOT_FOUND);
+           }else{
+             echo 'true';
+              $this->response([
+                         'status' => TRUE
+                             ], REST_Controller::HTTP_OK);
+           }
+  }
+}
 
 }
